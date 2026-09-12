@@ -393,7 +393,19 @@ class VacancyController extends Controller
     public function apply(ApplyVacancyRequest $request)
     {
         $validated = $request->validated();
-        $jobseeker = auth()->user()->profile;
+        $jobseeker = auth()->user()?->profile;
+
+        // Профиль может отсутствовать у старых пользователей — возвращаем пустую страницу
+        if (!$jobseeker) {
+            return Inertia::render('jobseeker/apply', [
+                'applications'      => [],
+                'totalCountApplied'  => 0,
+                'totalCountRejected' => 0,
+                'totalCountAccepted' => 0,
+                'industries'         => Industry::all(['id', 'name']),
+                'filters'            => [],
+            ]);
+        }
 
         $query = $jobseeker->applications()
             ->with('vacancy.employer');

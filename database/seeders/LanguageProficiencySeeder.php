@@ -13,12 +13,18 @@ class LanguageProficiencySeeder extends Seeder
      */
     public function run(): void
     {
-        LanguageProficiency::create(['title'=>'Beginner','level'=>'A1']);
-        LanguageProficiency::create(['title'=>'Elementary','level'=>'A2']);
-        LanguageProficiency::create(['title'=>'Pre-Intermediate','level'=>'B1']);
-        LanguageProficiency::create(['title'=>'Intermediate','level'=>'B2']);
-        LanguageProficiency::create(['title'=>'Upper-Intermediate','level'=>'C1']);
-        LanguageProficiency::create(['title'=>'Pro','level'=>'C2']);
-        LanguageProficiency::create(['title'=>'Native','level'=>'native']);
+        $levels = [
+            ['title' => 'Beginner', 'level' => 'A1'],
+            ['title' => 'Elementary', 'level' => 'A2'],
+            ['title' => 'Pre-Intermediate', 'level' => 'B1'],
+            ['title' => 'Intermediate', 'level' => 'B2'],
+            ['title' => 'Upper-Intermediate', 'level' => 'C1'],
+            ['title' => 'Pro', 'level' => 'C2'],
+            ['title' => 'Native', 'level' => 'native'],
+        ];
+
+        foreach ($levels as $item) {
+            LanguageProficiency::firstOrCreate(['level' => $item['level']], $item);
+        }
     }
 }

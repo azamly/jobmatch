@@ -13,11 +13,17 @@ class AdditionCategorySeeder extends Seeder
      */
     public function run(): void
     {
-        AdditionCategory::create(['name'=>'Резюме','slug'=>'resume']);
-        AdditionCategory::create(['name'=>'Сертификат','slug'=>'certificate']);
-        AdditionCategory::create(['name'=>'Портфолио','slug'=>'portfolio']);
-        AdditionCategory::create(['name'=>'Диплом','slug'=>'diploma']);
-        AdditionCategory::create(['name'=>'Проект','slug'=>'project']);
-        AdditionCategory::create(['name'=>'Достижения','slug'=>'achievement']);
+        $categories = [
+            ['name' => 'Резюме', 'slug' => 'resume'],
+            ['name' => 'Сертификат', 'slug' => 'certificate'],
+            ['name' => 'Портфолио', 'slug' => 'portfolio'],
+            ['name' => 'Диплом', 'slug' => 'diploma'],
+            ['name' => 'Проект', 'slug' => 'project'],
+            ['name' => 'Достижения', 'slug' => 'achievement'],
+        ];
+
+        foreach ($categories as $category) {
+            AdditionCategory::firstOrCreate(['slug' => $category['slug']], $category);
+        }
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Employer\Employer;
+use App\Models\JobSeeker\Profile\JobSeekerProfile;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -113,6 +114,14 @@ class RegisteredUserController extends Controller
         if ($validated['role'] === 'employer') {
             Employer::create([
                 'user_id' => $user->id,
+            ]);
+        }
+
+        // 🙋 Создание профиля соискателя при регистрации
+        if ($validated['role'] === 'jobseeker') {
+            JobSeekerProfile::create([
+                'user_id'     => $user->id,
+                'industry_id' => 12, // «Другое» — дефолтная отрасль
             ]);
         }
 
