@@ -11,6 +11,9 @@ sleep 5
 # Выполнение миграций
 php artisan migrate --force
 
+# Создание обязательных ролей (безопасно при повторном деплое)
+php artisan db:seed --class=RoleSeeder --force
+
 # Очистка старого кэша
 php artisan config:clear
 php artisan cache:clear
