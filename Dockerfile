@@ -30,9 +30,6 @@ RUN docker-php-ext-install \
     gd \
     zip
 
-# Переключение PHP-FPM на Unix-сокет (чтобы Render видел только один HTTP-порт — Nginx)
-RUN mkdir -p /run/php \
-    && sed -i 's|^listen = 9000|listen = /run/php/php-fpm.sock|' /usr/local/etc/php-fpm.d/www.conf
 
 # Установка Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
