@@ -239,7 +239,7 @@ class MatchingService
      */
     public function calculateProfileCompleteness(JobSeekerProfile $profile): array
     {
-        $profile->loadMissing(['skills', 'experiences', 'education', 'user.files']);
+        $profile->loadMissing(['skills', 'experiences', 'education', 'files', 'user']);
 
         $items = [
             [
@@ -275,7 +275,7 @@ class MatchingService
             [
                 'key' => 'cv',
                 'title' => 'Загруженное резюме (CV)',
-                'completed' => ($profile->user?->files?->count() ?? 0) > 0,
+                'completed' => ($profile->files?->count() ?? 0) > 0,
                 'weight' => 15,
             ],
         ];
