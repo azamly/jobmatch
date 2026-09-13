@@ -7,6 +7,7 @@ import { Link, usePage } from '@inertiajs/react';
 import { PropsWithChildren, ReactNode } from 'react';
 import {
     Building2Icon,
+    FileText,
     KeyIcon,
     KeyRoundIcon,
     LockIcon,
@@ -50,13 +51,22 @@ export default function SettingsLayout({ children,size='xl' }: {children:ReactNo
             'title' in item && item.title === 'Профиль'
         );
 
-        // Вставляем новый пункт сразу после "Профиль"
+        // Вставляем пункты загрузки и редактирования резюме сразу после "Профиль"
         if (profileIndex !== -1) {
-            sidebarNavItems.splice(profileIndex + 1, 0, {
-                title: 'Резюме (CV)',
-                href: '/settings/jobseeker',
-                icon: UploadIcon,
-            });
+            sidebarNavItems.splice(
+                profileIndex + 1,
+                0,
+                {
+                    title: 'Загрузка резюме',
+                    href: '/settings/jobseeker',
+                    icon: UploadIcon,
+                },
+                {
+                    title: 'Данные резюме',
+                    href: '/settings/jobseeker/edit',
+                    icon: FileText,
+                }
+            );
         }
     }
     else if(role==='employer'){
@@ -94,8 +104,6 @@ export default function SettingsLayout({ children,size='xl' }: {children:ReactNo
                                     item.className,
                                     {
                                         'bg-muted': currentPath === item.href,
-                                    },{
-                                        'bg-muted': (item.href === '/settings/jobseeker' && currentPath === '/settings/jobseeker/edit'),
                                     }
                                 )}
                             >

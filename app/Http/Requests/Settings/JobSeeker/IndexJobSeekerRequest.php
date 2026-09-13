@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Settings\JobSeeker;
 
-use App\Models\JobSeeker\Profile\JobSeekerProfile;
 use Illuminate\Foundation\Http\FormRequest;
 
 class IndexJobSeekerRequest extends FormRequest
@@ -14,11 +13,7 @@ class IndexJobSeekerRequest extends FormRequest
     {
         $user = $this->user();
 
-        if (JobSeekerProfile::where('user_id', $user->id)->exists()) {
-            return false;
-        }
-
-        return $user->hasRole('jobseeker');
+        return $user && $user->hasRole('jobseeker');
     }
 
     /**
@@ -32,13 +27,4 @@ class IndexJobSeekerRequest extends FormRequest
             //
         ];
     }
-    protected function failedAuthorization()
-    {
-        redirect()
-            ->route('jobseeker.edit')
-            ->with('error', 'У вас уже есть загруженный профиль резюме.')
-            ->send();
-        exit;
-    }
-
 }

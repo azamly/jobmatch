@@ -5,13 +5,13 @@ import {
     Education,
     Skill,
     Language,
-    Link,
+    Link as JobSeekerLink,
     Experience,
     Addition,
     JobSeekerProfileForm, Industry
 } from '@/types/jobseeker';
 import AppLayout from '@/layouts/app-layout';
-import { Head, useForm, usePage } from '@inertiajs/react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import HeadingSmall from '@/components/heading-small';
 import SettingsLayout from '@/layouts/settings/layout';
 import { toast } from 'sonner';
@@ -25,6 +25,7 @@ import {
     Languages, Loader2Icon,
     Plus,
     Save, SaveIcon, Trash,
+    Upload,
     UserIcon, X,
     XIcon,
     Link as LinkIcon,
@@ -153,7 +154,7 @@ export default function EditPage({ profile, completeness, message, type }: Props
         sort_order: data.languages.length
     });
 
-    const addLink = () => addArrayItem<Link>('links', {
+    const addLink = () => addArrayItem<JobSeekerLink>('links', {
         id: data.links.length+1,
         url: "",
         type: ""
@@ -267,7 +268,13 @@ export default function EditPage({ profile, completeness, message, type }: Props
                         </Card>
                     )}
 
-                    <div className="flex justify-end gap-3">
+                    <div className="flex flex-wrap items-center justify-end gap-3">
+                            <Button variant="outline" asChild>
+                                <Link href="/settings/jobseeker">
+                                    <Upload className="mr-2 h-4 w-4" />
+                                    Загрузить файл резюме (CV)
+                                </Link>
+                            </Button>
                             <Dialog open={showCVPreview} onOpenChange={setShowCVPreview}>
                                 <DialogTrigger asChild>
                                     <Button variant="outline">

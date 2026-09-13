@@ -1,5 +1,5 @@
 import type { BreadcrumbItem, SharedData } from '@/types';
-import { Head, router, usePage } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
 import HeadingSmall from '@/components/heading-small';
@@ -27,6 +27,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { ProfileCompleteness } from '@/types/employer';
 import { JobSeekerProfile } from '@/types/jobseeker';
 import { route } from 'ziggy-js';
+import { cn } from '@/lib/utils';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -150,10 +151,18 @@ export default function CvUpload({ profile, completeness, cvFile, industries = [
 
             <SettingsLayout size="4xl">
                 <div className="space-y-8">
-                    <HeadingSmall
-                        title="Резюме (CV)"
-                        description="Загрузите ваше резюме в любом формате. Наша система автоматически извлечет данные и подберет лучшие вакансии."
-                    />
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <HeadingSmall
+                            title="Загрузка резюме (CV)"
+                            description="Загрузите ваше резюме в любом формате. Наша система автоматически извлечет данные и подберет лучшие вакансии."
+                        />
+                        <Button variant="outline" asChild className="shrink-0">
+                            <Link href="/settings/jobseeker/edit">
+                                <FileText className="mr-2 h-4 w-4" />
+                                Редактировать вручную
+                            </Link>
+                        </Button>
+                    </div>
 
                     {/* Profile Completeness Card */}
                     {completeness && (
