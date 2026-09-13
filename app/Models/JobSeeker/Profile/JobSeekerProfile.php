@@ -36,6 +36,11 @@ class JobSeekerProfile extends Model
     public function industry(){
         return $this->belongsTo(Industry::class);
     }
+    public function files(): \Illuminate\Database\Eloquent\Relations\MorphMany
+    {
+        return $this->morphMany(\App\Models\JobSeeker\File\File::class, 'fileable');
+    }
+
     public function links(): \Illuminate\Database\Eloquent\Relations\MorphMany
     {
         return $this->morphMany(Link::class, 'linkable');

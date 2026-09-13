@@ -1,1130 +1,3 @@
-// //
-// // import { AnalyticsCard } from '@/components/jobseeker/analytics-card';
-// // import { Link, usePage, router } from '@inertiajs/react';
-// // import { Button } from '@/components/ui/button';
-// // import {
-// //     Building,
-// //     ChevronLeft,
-// //     ChevronRight,
-// //     ChevronsLeft,
-// //     ChevronsRight,
-// //     Clock,
-// //     DollarSign,
-// //     Eye,
-// //     Heart,
-// //     Inbox,
-// //     Loader2,
-// //     MapPin,
-// //     Plus,
-// //     Search,
-// //     SlidersHorizontal
-// // } from 'lucide-react';
-// // import { motion } from 'framer-motion';
-// // import React, { useState, useEffect, useCallback } from 'react';
-// // import { debounce } from 'lodash';
-// // import {
-// //     PaginationLink,
-// //     Recommended,
-// //     RecommendedPagination,
-// //     Vacancy,
-// //     VacancyPagination,
-// //     VacancyWithEmployer
-// // } from '@/types/employer';
-// // import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-// // import { CVViewer } from '@/components/jobseeker/cv-viewer';
-// // import { JobSeekerProfile } from '@/types/jobseeker';
-// // import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-// // import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-// // import { getVacancyType } from '@/lib/employer.data';
-// // import { Badge } from '@/components/ui/badge';
-// // import Paginate from '@/components/paginate';
-// // import { cn } from '@/lib/utils';
-// // import VacancyCard from '@/components/jobseeker/vacancy-card';
-// // import { SharedData } from '@/types';
-// // import { Input } from '@/components/ui/input';
-// // import { Label } from '@/components/ui/label';
-// // import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-// // import { Slider } from '@/components/ui/slider';
-// // import { toast } from 'sonner';
-// //
-// // interface FilterState {
-// //     search: string;
-// //     location: string;
-// //     jobType: string[];
-// //     salaryRange: [number, number];
-// //     skills: string[];
-// //     sortBy: string;
-// // }
-// //
-// // export default function JobSeekerDashboard({
-// //                                                jobseeker,
-// //                                                hasJobSeeker,
-// //                                                vacancies,
-// //                                                totalCountApplication = 0,
-// //                                                recommended
-// //                                            }: {
-// //     jobseeker: JobSeekerProfile;
-// //     hasJobSeeker: boolean;
-// //     vacancies: VacancyPagination;
-// //     totalCountApplication: number;
-// //     recommended: RecommendedPagination;
-// // }) {
-// //     const [showCVPreview, setShowCVPreview] = useState(false);
-// //     const { auth, filters } = usePage<SharedData & { filters: FilterState }>().props;
-// //     const totalPages = recommended.last_page;
-// //     const currentPage = recommended.current_page;
-// //
-// //     // Initialize state with fallback to avoid undefined errors
-// //     const [searchTerm, setSearchTerm] = useState<string>(filters?.search || '');
-// //     const [savedJobs, setSavedJobs] = useState<number[]>([]);
-// //     const [showFilters, setShowFilters] = useState(false);
-// //     const [activeFilters, setActiveFilters] = useState<FilterState>({
-// //         search: filters?.search || '',
-// //         location: filters?.location || '',
-// //         jobType: filters?.jobType || [],
-// //         salaryRange: filters?.salaryRange && Array.isArray(filters.salaryRange) && filters.salaryRange.length === 2
-// //             ? filters.salaryRange
-// //             : [0, 100000],
-// //         skills: filters?.skills || [],
-// //         sortBy: filters?.sortBy || 'relevance',
-// //     });
-// //     const [isSearching, setIsSearching] = useState(false);
-// //
-// //     // Debounced function to update URL with filters
-// //     const updateFilters = useCallback(
-// //         debounce((filters: FilterState) => {
-// //             // Convert filters to a plain object for Inertia
-// //             const params: Record<string, any> = {};
-// //             if (filters.search) params.search = filters.search;
-// //             if (filters.location) params.location = filters.location;
-// //             if (filters.jobType.length) params.jobType = filters.jobType;
-// //             if (filters.salaryRange) params.salaryRange = filters.salaryRange;
-// //             if (filters.skills.length) params.skills = filters.skills;
-// //             params.sortBy = filters.sortBy;
-// //
-// //             router.get(route('dashboard'), params, {
-// //                 preserveState: true,
-// //                 preserveScroll: true,
-// //                 onSuccess: () => {
-// //                     toast.success('Фильтры и поиск применены');
-// //                 },
-// //                 onError: () => {
-// //                     toast.error('Ошибка при применении фильтров или поиска');
-// //                 }
-// //             });
-// //         }, 300),
-// //         []
-// //     );
-// //
-// //     // Sync filters with URL
-// //     useEffect(() => {
-// //         // Update filters with searchTerm included
-// //         const updatedFilters = { ...activeFilters, search: searchTerm };
-// //         updateFilters(updatedFilters);
-// //         // Cleanup debounce on unmount
-// //         return () => {
-// //             updateFilters.cancel();
-// //         };
-// //     }, [searchTerm, activeFilters, updateFilters]);
-// //
-// //     const hasActiveFilters = () => {
-// //         return (
-// //             activeFilters.search ||
-// //             activeFilters.location ||
-// //             activeFilters.jobType.length > 0 ||
-// //             activeFilters.skills.length > 0 ||
-// //             activeFilters.salaryRange[0] !== 0 ||
-// //             activeFilters.salaryRange[1] !== 100000 ||
-// //             activeFilters.sortBy !== 'relevance'
-// //         );
-// //     };
-// //
-// //     const handleResetFilters = () => {
-// //         const resetFilters = {
-// //             search: '',
-// //             location: '',
-// //             jobType: [],
-// //             salaryRange: [0, 100000] as [number, number],
-// //             skills: [],
-// //             sortBy: 'relevance',
-// //         };
-// //         setActiveFilters(resetFilters);
-// //         setSearchTerm('');
-// //         updateFilters(resetFilters); // Immediately apply reset
-// //         toast.info('Фильтры и поиск сброшены');
-// //     };
-// //
-// //     const handleApplyFilters = (filters: FilterState) => {
-// //         setActiveFilters(filters);
-// //         setShowFilters(false);
-// //         updateFilters(filters);
-// //         toast.success('Фильтры применены');
-// //     };
-// //
-// //     const goForward10 = Math.min(currentPage + 10, totalPages);
-// //     const goBack10 = Math.max(currentPage - 10, 1);
-// //
-// //     // Common filter and search UI
-// //     const renderFilterUI = (dataLength: number) => (
-// //         <>
-// //             {/* Search and Filter Bar */}
-// //             <div className="flex gap-4">
-// //                 <div className="relative flex-1">
-// //                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-// //                     <Input
-// //                         placeholder="Поиск вакансий по названию, компании или навыкам..."
-// //                         value={searchTerm}
-// //                         onChange={(e) => setSearchTerm(e.target.value)}
-// //                         className="pl-10"
-// //                     />
-// //                 </div>
-// //                 <Dialog open={showFilters} onOpenChange={setShowFilters}>
-// //                     <DialogTrigger asChild>
-// //                         <Button
-// //                             variant="outline"
-// //                             className={hasActiveFilters() ? 'border-primary text-primary' : ''}
-// //                         >
-// //                             <SlidersHorizontal className="h-4 w-4 mr-2" />
-// //                             Фильтры
-// //                             {hasActiveFilters() && (
-// //                                 <Badge variant="secondary" className="ml-2 h-5 w-5 p-0 flex items-center justify-center text-xs">
-// //                                     !
-// //                                 </Badge>
-// //                             )}
-// //                         </Button>
-// //                     </DialogTrigger>
-// //                     <DialogContent>
-// //                         <DialogHeader>
-// //                             <DialogTitle>Фильтры вакансий</DialogTitle>
-// //                         </DialogHeader>
-// //                         <div className="space-y-4">
-// //                             <div>
-// //                                 <Label>Местоположение</Label>
-// //                                 <Input
-// //                                     value={activeFilters.location}
-// //                                     onChange={(e) =>
-// //                                         setActiveFilters({ ...activeFilters, location: e.target.value })
-// //                                     }
-// //                                     placeholder="Введите город или регион"
-// //                                 />
-// //                             </div>
-// //                             <div>
-// //                                 <Label>Тип занятости</Label>
-// //                                 <div className="flex flex-wrap gap-2">
-// //                                     {['full', 'part', 'remote', 'contract', 'internship', 'temporary'].map(
-// //                                         (type) => (
-// //                                             <Button
-// //                                                 key={type}
-// //                                                 variant={
-// //                                                     activeFilters.jobType.includes(type)
-// //                                                         ? 'default'
-// //                                                         : 'outline'
-// //                                                 }
-// //                                                 onClick={() =>
-// //                                                     setActiveFilters({
-// //                                                         ...activeFilters,
-// //                                                         jobType: activeFilters.jobType.includes(type)
-// //                                                             ? activeFilters.jobType.filter((t) => t !== type)
-// //                                                             : [...activeFilters.jobType, type],
-// //                                                     })
-// //                                                 }
-// //                                             >
-// //                                                 {getVacancyType(type)}
-// //                                             </Button>
-// //                                         )
-// //                                     )}
-// //                                 </div>
-// //                             </div>
-// //                             <div>
-// //                                 <Label>Диапазон зарплаты</Label>
-// //                                 <Slider
-// //                                     value={activeFilters.salaryRange}
-// //                                     onValueChange={(value: [number, number]) =>
-// //                                         setActiveFilters({ ...activeFilters, salaryRange: value })
-// //                                     }
-// //                                     min={0}
-// //                                     max={100000}
-// //                                     step={500}
-// //                                     defaultValue={[0, 100000]}
-// //                                 />
-// //                                 <div className="flex justify-between text-sm">
-// //                                     <span>{activeFilters.salaryRange[0]} смн.</span>
-// //                                     <span>100000 смн.</span>
-// //                                 </div>
-// //                             </div>
-// //                             <div>
-// //                                 <Label>Навыки</Label>
-// //                                 <Input
-// //                                     value={activeFilters.skills.join(',')}
-// //                                     onChange={(e) =>
-// //                                         setActiveFilters({
-// //                                             ...activeFilters,
-// //                                             skills: e.target.value
-// //                                                 ? e.target.value.split(',').map((s) => s.trim()).filter(s => s)
-// //                                                 : [],
-// //                                         })
-// //                                     }
-// //                                     placeholder="Введите навыки через запятую"
-// //                                 />
-// //                             </div>
-// //                             <div>
-// //                                 <Label>Сортировка</Label>
-// //                                 <Select
-// //                                     value={activeFilters.sortBy}
-// //                                     onValueChange={(value) =>
-// //                                         setActiveFilters({ ...activeFilters, sortBy: value })
-// //                                     }
-// //                                 >
-// //                                     <SelectTrigger>
-// //                                         <SelectValue placeholder="Выберите сортировку" />
-// //                                     </SelectTrigger>
-// //                                     <SelectContent>
-// //                                         <SelectItem value="relevance">По релевантности</SelectItem>
-// //                                         <SelectItem value="date">По дате</SelectItem>
-// //                                         <SelectItem value="salary_high">По зарплате (убыв.)</SelectItem>
-// //                                         <SelectItem value="salary_low">По зарплате (возр.)</SelectItem>
-// //                                     </SelectContent>
-// //                                 </Select>
-// //                             </div>
-// //                             <div className="flex gap-2">
-// //                                 <Button onClick={() => handleApplyFilters(activeFilters)}>
-// //                                     Применить
-// //                                 </Button>
-// //                                 <Button variant="outline" onClick={handleResetFilters}>
-// //                                     Сбросить
-// //                                 </Button>
-// //                             </div>
-// //                         </div>
-// //                     </DialogContent>
-// //                 </Dialog>
-// //                 {hasActiveFilters() && (
-// //                     <Button variant="ghost" onClick={handleResetFilters}>
-// //                         Сбросить
-// //                     </Button>
-// //                 )}
-// //             </div>
-// //
-// //             {/* Active Filters Display */}
-// //             {hasActiveFilters() && (
-// //                 <div className="flex flex-wrap gap-2 p-4 bg-muted/50 rounded-lg">
-// //                     <span className="text-sm font-medium">Активные фильтры:</span>
-// //                     {activeFilters.search && (
-// //                         <Badge variant="secondary">Поиск: {activeFilters.search}</Badge>
-// //                     )}
-// //                     {activeFilters.location && (
-// //                         <Badge variant="secondary">Локация: {activeFilters.location}</Badge>
-// //                     )}
-// //                     {activeFilters.jobType.map((type) => (
-// //                         <Badge key={type} variant="secondary">
-// //                             {getVacancyType(type)}
-// //                         </Badge>
-// //                     ))}
-// //                     {activeFilters.salaryRange && (
-// //                         <Badge variant="secondary">
-// //                             Зарплата: {activeFilters.salaryRange[0]} - {activeFilters.salaryRange[1]} смн.
-// //                         </Badge>
-// //                     )}
-// //                     {activeFilters.skills.map((skill) => (
-// //                         <Badge key={skill} variant="secondary">
-// //                             {skill}
-// //                         </Badge>
-// //                     ))}
-// //                     <Badge variant="secondary">
-// //                         Сортировка:{' '}
-// //                         {activeFilters.sortBy === 'relevance'
-// //                             ? 'По релевантности'
-// //                             : activeFilters.sortBy === 'date'
-// //                                 ? 'По дате'
-// //                                 : activeFilters.sortBy === 'salary_high'
-// //                                     ? 'По зарплате (убыв.)'
-// //                                     : 'По зарплате (возр.)'}
-// //                     </Badge>
-// //                 </div>
-// //             )}
-// //
-// //             {/* Results Count */}
-// //             <div className="flex justify-between items-center">
-// //                 <p className="text-sm text-muted-foreground">
-// //                     Найдено {dataLength}{' '}
-// //                     {dataLength === 1 ? 'вакансия' : 'вакансий'}
-// //                 </p>
-// //                 <div className="text-sm text-muted-foreground">
-// //                     Сортировка:{' '}
-// //                     {activeFilters.sortBy === 'relevance'
-// //                         ? 'По релевантности'
-// //                         : activeFilters.sortBy === 'date'
-// //                             ? 'По дате'
-// //                             : activeFilters.sortBy === 'salary_high'
-// //                                 ? 'По зарплате (убыв.)'
-// //                                 : 'По зарплате (возр.)'}
-// //                 </div>
-// //             </div>
-// //         </>
-// //     );
-// //
-// //     return (
-// //         <>
-// //             <div className="@container/main p-2 flex flex-1 flex-col gap-2">
-// //                 <div className="flex flex-col gap-4 md:gap-6">
-// //                     <AnalyticsCard totalCountApplication={totalCountApplication} totalCountMessages={0} totalCountViewProfile={0} />
-// //                     <div className="flex items-center justify-between">
-// //                         <span className="text-3xl font-bold">Вакансии</span>
-// //                         {hasJobSeeker ? (
-// //                             <Dialog open={showCVPreview} onOpenChange={setShowCVPreview}>
-// //                                 <DialogTrigger asChild>
-// //                                     <Button variant="outline">
-// //                                         <Eye className="h-4 w-4" />
-// //                                         Просмотр резюме
-// //                                     </Button>
-// //                                 </DialogTrigger>
-// //                                 <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-// //                                     <DialogHeader>
-// //                                         <DialogTitle>Предпросмотр CV</DialogTitle>
-// //                                     </DialogHeader>
-// //                                     <CVViewer data={jobseeker} showActions={false} />
-// //                                 </DialogContent>
-// //                             </Dialog>
-// //                         ) : (
-// //                             <Link href={route('jobseeker.index')}>
-// //                                 <Button>
-// //                                     <Plus className="h-4 w-4" /> Заполнить резюме (CV)
-// //                                 </Button>
-// //                             </Link>
-// //                         )}
-// //                     </div>
-// //                 </div>
-// //                 <Tabs defaultValue="all">
-// //                     <TabsList className="grid w-full grid-cols-1 md:grid-cols-2">
-// //                         <TabsTrigger value="all">Все</TabsTrigger>
-// //                         <TabsTrigger value="recommended">Рекомендованные</TabsTrigger>
-// //                     </TabsList>
-// //                     <TabsContent value="all" className="space-y-6">
-// //                         {renderFilterUI(vacancies.data.length)}
-// //                         {vacancies.data.length === 0 ? (
-// //                             <div className="flex flex-col items-center gap-4 py-20 text-center text-muted-foreground">
-// //                                 <Inbox className="h-16 w-16 text-muted-foreground" />
-// //                                 <span>Пока нет вакансий</span>
-// //                             </div>
-// //                         ) : (
-// //                             <>
-// //                                 {vacancies.data.map((vacancy: VacancyWithEmployer,index) => (
-// //                                     <VacancyCard key={index} vacancy={vacancy} />
-// //                                 ))}
-// //                                 <div className="mt-4 flex items-center justify-end">
-// //                                     <Paginate data={vacancies} />
-// //                                 </div>
-// //                             </>
-// //                         )}
-// //                     </TabsContent>
-// //                     <TabsContent value="recommended" className="space-y-6">
-// //                         {renderFilterUI(recommended.data.length)}
-// //                         {recommended.data.length === 0 ? (
-// //                             <div className="flex flex-col items-center gap-4 py-20 text-center text-muted-foreground">
-// //                                 <Inbox className="h-16 w-16 text-muted-foreground" />
-// //                                 <span>Пока нет вакансий</span>
-// //                                 <Link
-// //                                     href={route('recommended.vacancy', jobseeker ? jobseeker.id : 0)}
-// //                                     onClick={() => setIsSearching(true)}
-// //                                 >
-// //                                     <motion.button
-// //                                         disabled={isSearching}
-// //                                         whileTap={{ scale: 0.95 }}
-// //                                         whileHover={{ scale: 1.05 }}
-// //                                         animate={isSearching ? { rotate: 360 } : { rotate: 0 }}
-// //                                         transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-// //                                         className="px-4 py-2 bg-blue-600 text-white rounded-md flex items-center gap-2"
-// //                                     >
-// //                                         {isSearching && (
-// //                                             <span className="animate-spin inline-block">
-// //                                                 <Loader2 />
-// //                                             </span>
-// //                                         )}
-// //                                         Начать поиск
-// //                                     </motion.button>
-// //                                 </Link>
-// //                             </div>
-// //                         ) : (
-// //                             <div className="space-y-6">
-// //                                 <div className="flex items-center justify-end mt-4">
-// //                                     <Link
-// //                                         href={route('recommended.vacancy', jobseeker ? jobseeker.id : 0)}
-// //                                         onClick={() => setIsSearching(true)}
-// //                                     >
-// //                                         <motion.button
-// //                                             disabled={isSearching}
-// //                                             whileTap={{ scale: 0.95 }}
-// //                                             whileHover={{ scale: 1.05 }}
-// //                                             animate={isSearching ? { rotate: 360 } : { rotate: 0 }}
-// //                                             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-// //                                             className="px-4 py-2 bg-blue-600 text-white rounded-md flex items-center gap-2"
-// //                                         >
-// //                                             {isSearching && (
-// //                                                 <span className="animate-spin inline-block">
-// //                                                     <Loader2 />
-// //                                                 </span>
-// //                                             )}
-// //                                             Начать поиск
-// //                                         </motion.button>
-// //                                     </Link>
-// //                                 </div>
-// //                                 {recommended.data.map((recommend: Recommended,index) => (
-// //                                     <VacancyCard
-// //                                         key={index}
-// //                                         vacancy={recommend.vacancy}
-// //                                         setScore={true}
-// //                                         score={recommend.score}
-// //                                     />
-// //                                 ))}
-// //                                 {recommended.data.length > 0 && (
-// //                                     <div className="flex flex-wrap items-center gap-2 justify-end">
-// //                                         {currentPage > 10 && (
-// //                                             <Link
-// //                                                 href={recommended.path + `?page=${goBack10}`}
-// //                                                 className="px-3 py-1 border rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200"
-// //                                             >
-// //                                                 <ChevronsLeft className="w-4 h-4" />
-// //                                             </Link>
-// //                                         )}
-// //                                         {recommended.links.map((link: PaginationLink, index: number) => {
-// //                                             let content: React.ReactNode = (
-// //                                                 <span dangerouslySetInnerHTML={{ __html: link.label }} />
-// //                                             );
-// //                                             if (
-// //                                                 link.label === '&laquo;' ||
-// //                                                 link.label.toLowerCase().includes('previous')
-// //                                             ) {
-// //                                                 content = <ChevronLeft className="w-4 h-4" />;
-// //                                             } else if (
-// //                                                 link.label === '&raquo;' ||
-// //                                                 link.label.toLowerCase().includes('next')
-// //                                             ) {
-// //                                                 content = <ChevronRight className="w-4 h-4" />;
-// //                                             }
-// //                                             return link.url ? (
-// //                                                 <Link
-// //                                                     key={index}
-// //                                                     href={link.url}
-// //                                                     className={`px-3 py-1 border rounded-md ${
-// //                                                         link.active
-// //                                                             ? 'bg-primary text-white border-blue-600'
-// //                                                             : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'
-// //                                                     }`}
-// //                                                 >
-// //                                                     {content}
-// //                                                 </Link>
-// //                                             ) : (
-// //                                                 <Button
-// //                                                     key={index}
-// //                                                     disabled
-// //                                                     className="px-3 py-1 border rounded-md bg-gray-100 text-gray-400 border-gray-300"
-// //                                                 >
-// //                                                     {content}
-// //                                                 </Button>
-// //                                             );
-// //                                         })}
-// //                                         {currentPage + 10 <= totalPages && (
-// //                                             <Link
-// //                                                 href={recommended.path + `?page=${goForward10}`}
-// //                                                 className="px-3 py-1 border rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200"
-// //                                             >
-// //                                                 <ChevronsRight className="w-4 h-4" />
-// //                                             </Link>
-// //                                         )}
-// //                                     </div>
-// //                                 )}
-// //                             </div>
-// //                         )}
-// //                     </TabsContent>
-// //                 </Tabs>
-// //             </div>
-// //         </>
-// //     );
-// // }
-//
-// // resources/js/Pages/dashboard.tsx (JobSeekerDashboard)
-//
-// import { AnalyticsCard } from '@/components/jobseeker/analytics-card';
-// import { Link, usePage, router } from '@inertiajs/react';
-// import { Button } from '@/components/ui/button';
-// import {
-//     Building,
-//     ChevronLeft,
-//     ChevronRight,
-//     ChevronsLeft,
-//     ChevronsRight,
-//     Clock,
-//     DollarSign,
-//     Eye,
-//     Heart,
-//     Inbox,
-//     Loader2,
-//     MapPin,
-//     Plus,
-//     Search,
-//     SlidersHorizontal
-// } from 'lucide-react';
-// import { motion } from 'framer-motion';
-// import React, { useState, useEffect, useCallback } from 'react';
-// import { debounce } from 'lodash';
-// import {
-//     PaginationLink,
-//     Recommended,
-//     RecommendedPagination,
-//     Vacancy,
-//     VacancyPagination,
-//     VacancyWithEmployer
-// } from '@/types/employer';
-// import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-// import { CVViewer } from '@/components/jobseeker/cv-viewer';
-// import { JobSeekerProfile } from '@/types/jobseeker';
-// import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-// import { getVacancyType } from '@/lib/employer.data';
-// import { Badge } from '@/components/ui/badge';
-// import Paginate from '@/components/paginate';
-// import { cn } from '@/lib/utils';
-// import VacancyCard from '@/components/jobseeker/vacancy-card';
-// import { SharedData } from '@/types';
-// import { Input } from '@/components/ui/input';
-// import { Label } from '@/components/ui/label';
-// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-// import { Slider } from '@/components/ui/slider';
-// import { toast } from 'sonner';
-// import { industries } from '@/lib/jobseeker.data';
-//
-// interface FilterState {
-//     search: string;
-//     location: string;
-//     jobType: string[];
-//     salaryRange: [number, number];
-//     skills: string[];
-//     sortBy: string;
-//     industry: string | null;  // Добавлен industry (string для 'all' или id as string)
-// }
-//
-// export default function JobSeekerDashboard({
-//                                                jobseeker,
-//                                                hasJobSeeker,
-//                                                vacancies,
-//                                                totalCountApplication = 0,
-//                                                totalCountViews = 0,
-//                                                totalCountAllVacancies = 0,
-//                                                totalCountRecommendedVacancies=0,
-//                                                recommended,
-//                                            }: {
-//     jobseeker: JobSeekerProfile;
-//     hasJobSeeker: boolean;
-//     vacancies: VacancyPagination;
-//     totalCountApplication: number;
-//     totalCountViews:number;
-//     totalCountAllVacancies:number;
-//     totalCountRecommendedVacancies:number;
-//     recommended: RecommendedPagination;
-// }) {
-//     const [showCVPreview, setShowCVPreview] = useState(false);
-//     const { auth, filters } = usePage<SharedData & { filters: FilterState; industries: { id: number; name: string }[] }>().props;
-//     const totalPages = recommended.last_page;
-//     const currentPage = recommended.current_page;
-//
-//     // Initialize state with fallback to avoid undefined errors
-//     const [searchTerm, setSearchTerm] = useState<string>(filters?.search || '');
-//     const [savedJobs, setSavedJobs] = useState<number[]>([]);
-//     const [showFilters, setShowFilters] = useState(false);
-//     const [activeFilters, setActiveFilters] = useState<FilterState>({
-//         search: filters?.search || '',
-//         location: filters?.location || '',
-//         jobType: filters?.jobType || [],
-//         salaryRange: filters?.salaryRange && Array.isArray(filters.salaryRange) && filters.salaryRange.length === 2
-//             ? filters.salaryRange
-//             : [0, 100000],
-//         skills: filters?.skills || [],
-//         sortBy: filters?.sortBy || 'relevance',
-//         industry: filters?.industry || null,  // Новый фильтр
-//     });
-//     const [isSearching, setIsSearching] = useState(false);
-//
-//     // Debounced function to update URL with filters
-//     const updateFilters = useCallback(
-//         debounce((filters: FilterState) => {
-//             // Convert filters to a plain object for Inertia
-//             const params: Record<string, any> = {};
-//             if (filters.search) params.search = filters.search;
-//             if (filters.location) params.location = filters.location;
-//             if (filters.jobType.length) params.jobType = filters.jobType;
-//             if (filters.salaryRange) params.salaryRange = filters.salaryRange;
-//             if (filters.skills.length) params.skills = filters.skills;
-//             params.sortBy = filters.sortBy;
-//             if (filters.industry) params.industry = filters.industry;  // Добавлен industry
-//
-//             router.get(route('dashboard'), params, {
-//                 preserveState: true,
-//                 preserveScroll: true,
-//                 onSuccess: () => {
-//                     toast.success('Фильтры и поиск применены');
-//                 },
-//                 onError: () => {
-//                     toast.error('Ошибка при применении фильтров или поиска');
-//                 }
-//             });
-//         }, 300),
-//         []
-//     );
-//
-//     // Sync filters with URL
-//     useEffect(() => {
-//         // Update filters with searchTerm included
-//         const updatedFilters = { ...activeFilters, search: searchTerm };
-//         updateFilters(updatedFilters);
-//         // Cleanup debounce on unmount
-//         return () => {
-//             updateFilters.cancel();
-//         };
-//     }, [searchTerm, activeFilters, updateFilters]);
-//
-//     const hasActiveFilters = () => {
-//         return (
-//             activeFilters.search ||
-//             activeFilters.location ||
-//             activeFilters.jobType.length > 0 ||
-//             activeFilters.skills.length > 0 ||
-//             activeFilters.salaryRange[0] !== 0 ||
-//             activeFilters.salaryRange[1] !== 100000 ||
-//             activeFilters.sortBy !== 'relevance' ||
-//             activeFilters.industry !== null  // Добавлен
-//         );
-//     };
-//
-//     const handleResetFilters = () => {
-//         const resetFilters = {
-//             search: '',
-//             location: '',
-//             jobType: [],
-//             salaryRange: [0, 100000] as [number, number],
-//             skills: [],
-//             sortBy: 'relevance',
-//             industry: null,  // Сброс industry
-//         };
-//         setActiveFilters(resetFilters);
-//         setSearchTerm('');
-//         updateFilters(resetFilters); // Immediately apply reset
-//         toast.info('Фильтры и поиск сброшены');
-//     };
-//
-//     const handleApplyFilters = (filters: FilterState) => {
-//         setActiveFilters(filters);
-//         setShowFilters(false);
-//         updateFilters(filters);
-//         toast.success('Фильтры применены');
-//     };
-//
-//     const goForward10 = Math.min(currentPage + 10, totalPages);
-//     const goBack10 = Math.max(currentPage - 10, 1);
-//
-//     // Common filter and search UI
-//     const renderFilterUI = (dataLength: number) => (
-//         <>
-//             {/* Search and Filter Bar */}
-//             <div className="flex gap-4">
-//                 <div className="relative flex-1">
-//                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-//                     <Input
-//                         placeholder="Поиск вакансий по названию, компании или навыкам..."
-//                         value={searchTerm}
-//                         onChange={(e) => setSearchTerm(e.target.value)}
-//                         className="pl-10"
-//                     />
-//                 </div>
-//                 <Dialog open={showFilters} onOpenChange={setShowFilters}>
-//                     <DialogTrigger asChild>
-//                         <Button
-//                             variant="outline"
-//                             className={hasActiveFilters() ? 'border-primary text-primary' : ''}
-//                         >
-//                             <SlidersHorizontal className="h-4 w-4 mr-2" />
-//                             Фильтры
-//                             {hasActiveFilters() && (
-//                                 <Badge variant="secondary" className="ml-2 h-5 w-5 p-0 flex items-center justify-center text-xs">
-//                                     !
-//                                 </Badge>
-//                             )}
-//                         </Button>
-//                     </DialogTrigger>
-//                     <DialogContent>
-//                         <DialogHeader>
-//                             <DialogTitle>Фильтры вакансий</DialogTitle>
-//                         </DialogHeader>
-//                         <div className="space-y-4">
-//                             <div>
-//                                 <Label>Местоположение</Label>
-//                                 <Input
-//                                     value={activeFilters.location}
-//                                     onChange={(e) =>
-//                                         setActiveFilters({ ...activeFilters, location: e.target.value })
-//                                     }
-//                                     placeholder="Введите город или регион"
-//                                 />
-//                             </div>
-//                             <div>
-//                                 <Label>Тип занятости</Label>
-//                                 <div className="flex flex-wrap gap-2">
-//                                     {['full', 'part', 'remote', 'contract', 'internship', 'temporary'].map(
-//                                         (type) => (
-//                                             <Button
-//                                                 key={type}
-//                                                 variant={
-//                                                     activeFilters.jobType.includes(type)
-//                                                         ? 'default'
-//                                                         : 'outline'
-//                                                 }
-//                                                 onClick={() =>
-//                                                     setActiveFilters({
-//                                                         ...activeFilters,
-//                                                         jobType: activeFilters.jobType.includes(type)
-//                                                             ? activeFilters.jobType.filter((t) => t !== type)
-//                                                             : [...activeFilters.jobType, type],
-//                                                     })
-//                                                 }
-//                                             >
-//                                                 {getVacancyType(type)}
-//                                             </Button>
-//                                         )
-//                                     )}
-//                                 </div>
-//                             </div>
-//                             <div>
-//                                 <Label>Диапазон зарплаты</Label>
-//                                 <Slider
-//                                     value={activeFilters.salaryRange}
-//                                     onValueChange={(value: [number, number]) =>
-//                                         setActiveFilters({ ...activeFilters, salaryRange: value })
-//                                     }
-//                                     min={0}
-//                                     max={100000}
-//                                     step={500}
-//                                     defaultValue={[0, 100000]}
-//                                 />
-//                                 <div className="flex justify-between text-sm">
-//                                     <span>{activeFilters.salaryRange[0]} смн.</span>
-//                                     <span>100000 смн.</span>
-//                                 </div>
-//                             </div>
-//                             <div>
-//                                 <Label>Навыки</Label>
-//                                 <Input
-//                                     value={activeFilters.skills.join(',')}
-//                                     onChange={(e) =>
-//                                         setActiveFilters({
-//                                             ...activeFilters,
-//                                             skills: e.target.value
-//                                                 ? e.target.value.split(',').map((s) => s.trim()).filter(s => s)
-//                                                 : [],
-//                                         })
-//                                     }
-//                                     placeholder="Введите навыки через запятую"
-//                                 />
-//                             </div>
-//                             <div>  {/* Новый Select для industry */}
-//                                 <Label>Отрасль</Label>
-//                                 <Select
-//                                     value={activeFilters.industry || 'all'}
-//                                     onValueChange={(value) =>
-//                                         setActiveFilters({ ...activeFilters, industry: value === 'all' ? null : value })
-//                                     }
-//                                 >
-//                                     <SelectTrigger>
-//                                         <SelectValue placeholder="Выберите отрасль" />
-//                                     </SelectTrigger>
-//                                     <SelectContent>
-//                                         <SelectItem value="all">Все отрасли</SelectItem>
-//                                         {industries.map((industry) => (
-//                                             <SelectItem key={industry.id} value={industry.id.toString()}>
-//                                                 {industry.name}
-//                                             </SelectItem>
-//                                         ))}
-//                                     </SelectContent>
-//                                 </Select>
-//                             </div>
-//                             <div>
-//                                 <Label>Сортировка</Label>
-//                                 <Select
-//                                     value={activeFilters.sortBy}
-//                                     onValueChange={(value) =>
-//                                         setActiveFilters({ ...activeFilters, sortBy: value })
-//                                     }
-//                                 >
-//                                     <SelectTrigger>
-//                                         <SelectValue placeholder="Выберите сортировку" />
-//                                     </SelectTrigger>
-//                                     <SelectContent>
-//                                         <SelectItem value="relevance">По релевантности</SelectItem>
-//                                         <SelectItem value="date">По дате</SelectItem>
-//                                         <SelectItem value="salary_high">По зарплате (убыв.)</SelectItem>
-//                                         <SelectItem value="salary_low">По зарплате (возр.)</SelectItem>
-//                                     </SelectContent>
-//                                 </Select>
-//                             </div>
-//                             <div className="flex gap-2">
-//                                 <Button onClick={() => handleApplyFilters(activeFilters)}>
-//                                     Применить
-//                                 </Button>
-//                                 <Button variant="outline" onClick={handleResetFilters}>
-//                                     Сбросить
-//                                 </Button>
-//                             </div>
-//                         </div>
-//                     </DialogContent>
-//                 </Dialog>
-//                 {hasActiveFilters() && (
-//                     <Button variant="ghost" onClick={handleResetFilters}>
-//                         Сбросить
-//                     </Button>
-//                 )}
-//             </div>
-//
-//             {/* Active Filters Display */}
-//             {hasActiveFilters() && (
-//                 <div className="flex flex-wrap gap-2 p-4 bg-muted/50 rounded-lg">
-//                     <span className="text-sm font-medium">Активные фильтры:</span>
-//                     {activeFilters.search && (
-//                         <Badge variant="secondary">Поиск: {activeFilters.search}</Badge>
-//                     )}
-//                     {activeFilters.location && (
-//                         <Badge variant="secondary">Локация: {activeFilters.location}</Badge>
-//                     )}
-//                     {activeFilters.jobType.map((type) => (
-//                         <Badge key={type} variant="secondary">
-//                             {getVacancyType(type)}
-//                         </Badge>
-//                     ))}
-//                     {activeFilters.salaryRange && (
-//                         <Badge variant="secondary">
-//                             Зарплата: {activeFilters.salaryRange[0]} - {activeFilters.salaryRange[1]} смн.
-//                         </Badge>
-//                     )}
-//                     {activeFilters.skills.map((skill) => (
-//                         <Badge key={skill} variant="secondary">
-//                             {skill}
-//                         </Badge>
-//                     ))}
-//                     {activeFilters.industry && (  // Добавлен для industry
-//                         <Badge variant="secondary">
-//                             Отрасль: {industries.find(i => i.id.toString() === activeFilters.industry)?.name || ''}
-//                         </Badge>
-//                     )}
-//                     <Badge variant="secondary">
-//                         Сортировка:{' '}
-//                         {activeFilters.sortBy === 'relevance'
-//                             ? 'По релевантности'
-//                             : activeFilters.sortBy === 'date'
-//                                 ? 'По дате'
-//                                 : activeFilters.sortBy === 'salary_high'
-//                                     ? 'По зарплате (убыв.)'
-//                                     : 'По зарплате (возр.)'}
-//                     </Badge>
-//                 </div>
-//             )}
-//
-//             {/* Results Count */}
-//             <div className="flex justify-between items-center">
-//                 <p className="text-sm text-muted-foreground">
-//                     Найдено {dataLength}{' '}
-//                     {dataLength === 1 ? 'вакансия' : 'вакансий'}
-//                 </p>
-//                 <div className="text-sm text-muted-foreground">
-//                     Сортировка:{' '}
-//                     {activeFilters.sortBy === 'relevance'
-//                         ? 'По релевантности'
-//                         : activeFilters.sortBy === 'date'
-//                             ? 'По дате'
-//                             : activeFilters.sortBy === 'salary_high'
-//                                 ? 'По зарплате (убыв.)'
-//                                 : 'По зарплате (возр.)'}
-//                 </div>
-//             </div>
-//         </>
-//     );
-//
-//     return (
-//         <>
-//             <div className="@container/main p-2 flex flex-1 flex-col gap-2">
-//                 <div className="flex flex-col gap-4 md:gap-6">
-//                     <AnalyticsCard totalCountApplication={totalCountApplication} totalCountRecommendedVacancies={totalCountRecommendedVacancies} totalCountAllVacancies={totalCountAllVacancies} totalCountViewProfile={totalCountViews} />
-//                     <div className="flex items-center justify-between">
-//                         <span className="text-3xl font-bold">Вакансии</span>
-//                         {hasJobSeeker ? (
-//                             <Dialog open={showCVPreview} onOpenChange={setShowCVPreview}>
-//                                 <DialogTrigger asChild>
-//                                     <Button variant="outline">
-//                                         <Eye className="h-4 w-4" />
-//                                         Просмотр резюме
-//                                     </Button>
-//                                 </DialogTrigger>
-//                                 <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-//                                     <DialogHeader>
-//                                         <DialogTitle>Предпросмотр CV</DialogTitle>
-//                                     </DialogHeader>
-//                                     <CVViewer data={jobseeker} showActions={false} />
-//                                 </DialogContent>
-//                             </Dialog>
-//                         ) : (
-//                             <Link href={route('jobseeker.index')}>
-//                                 <Button>
-//                                     <Plus className="h-4 w-4" /> Заполнить резюме (CV)
-//                                 </Button>
-//                             </Link>
-//                         )}
-//                     </div>
-//                 </div>
-//                 <Tabs defaultValue="all">
-//                     <TabsList className="grid w-full grid-cols-1 md:grid-cols-2">
-//                         <TabsTrigger value="all">Все</TabsTrigger>
-//                         <TabsTrigger value="recommended">Рекомендованные</TabsTrigger>
-//                     </TabsList>
-//                     <TabsContent value="all" className="space-y-6">
-//                         {renderFilterUI(vacancies.data.length)}
-//                         {vacancies.data.length === 0 ? (
-//                             <div className="flex flex-col items-center gap-4 py-20 text-center text-muted-foreground">
-//                                 <Inbox className="h-16 w-16 text-muted-foreground" />
-//                                 <span>Пока нет вакансий</span>
-//                             </div>
-//                         ) : (
-//                             <>
-//                                 {vacancies.data.map((vacancy: VacancyWithEmployer,index) => (
-//                                     <VacancyCard key={index} vacancy={vacancy} />
-//                                 ))}
-//                                 <div className="mt-4 flex items-center justify-end">
-//                                     <Paginate data={vacancies} />
-//                                 </div>
-//                             </>
-//                         )}
-//                     </TabsContent>
-//                     <TabsContent value="recommended" className="space-y-6">
-//                         {renderFilterUI(recommended.data.length)}
-//                         {recommended.data.length === 0 ? (
-//                             <div className="flex flex-col items-center gap-4 py-20 text-center text-muted-foreground">
-//                                 <Inbox className="h-16 w-16 text-muted-foreground" />
-//                                 <span>Пока нет вакансий</span>
-//                                 <Link
-//                                     href={route('recommended.vacancy', jobseeker ? jobseeker.id : 0)}
-//                                     onClick={() => setIsSearching(true)}
-//                                 >
-//                                     <motion.button
-//                                         disabled={isSearching}
-//                                         whileTap={{ scale: 0.95 }}
-//                                         whileHover={{ scale: 1.05 }}
-//                                         animate={isSearching ? { rotate: 360 } : { rotate: 0 }}
-//                                         transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-//                                         className="px-4 py-2 bg-blue-600 text-white rounded-md flex items-center gap-2"
-//                                     >
-//                                         {isSearching && (
-//                                             <span className="animate-spin inline-block">
-//                                                 <Loader2 />
-//                                             </span>
-//                                         )}
-//                                         Начать поиск
-//                                     </motion.button>
-//                                 </Link>
-//                             </div>
-//                         ) : (
-//                             <div className="space-y-6">
-//                                 <div className="flex items-center justify-end mt-4">
-//                                     <Link
-//                                         href={route('recommended.vacancy', jobseeker ? jobseeker.id : 0)}
-//                                         onClick={() => setIsSearching(true)}
-//                                     >
-//                                         <motion.button
-//                                             disabled={isSearching}
-//                                             whileTap={{ scale: 0.95 }}
-//                                             whileHover={{ scale: 1.05 }}
-//                                             animate={isSearching ? { rotate: 360 } : { rotate: 0 }}
-//                                             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-//                                             className="px-4 py-2 bg-blue-600 text-white rounded-md flex items-center gap-2"
-//                                         >
-//                                             {isSearching && (
-//                                                 <span className="animate-spin inline-block">
-//                                                     <Loader2 />
-//                                                 </span>
-//                                             )}
-//                                             Начать поиск
-//                                         </motion.button>
-//                                     </Link>
-//                                 </div>
-//                                 {recommended.data.map((recommend: Recommended,index) => (
-//                                     <VacancyCard
-//                                         key={index}
-//                                         vacancy={recommend.vacancy}
-//                                         setScore={true}
-//                                         score={recommend.score}
-//                                     />
-//                                 ))}
-//                                 {recommended.data.length > 0 && (
-//                                     <div className="flex flex-wrap items-center gap-2 justify-end">
-//                                         {currentPage > 10 && (
-//                                             <Link
-//                                                 href={recommended.path + `?page=${goBack10}`}
-//                                                 className="px-3 py-1 border rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200"
-//                                             >
-//                                                 <ChevronsLeft className="w-4 h-4" />
-//                                             </Link>
-//                                         )}
-//                                         {recommended.links.map((link: PaginationLink, index: number) => {
-//                                             let content: React.ReactNode = (
-//                                                 <span dangerouslySetInnerHTML={{ __html: link.label }} />
-//                                             );
-//                                             if (
-//                                                 link.label === '&laquo;' ||
-//                                                 link.label.toLowerCase().includes('previous')
-//                                             ) {
-//                                                 content = <ChevronLeft className="w-4 h-4" />;
-//                                             } else if (
-//                                                 link.label === '&raquo;' ||
-//                                                 link.label.toLowerCase().includes('next')
-//                                             ) {
-//                                                 content = <ChevronRight className="w-4 h-4" />;
-//                                             }
-//                                             return link.url ? (
-//                                                 <Link
-//                                                     key={index}
-//                                                     href={link.url}
-//                                                     className={`px-3 py-1 border rounded-md ${
-//                                                         link.active
-//                                                             ? 'bg-primary text-white border-blue-600'
-//                                                             : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'
-//                                                     }`}
-//                                                 >
-//                                                     {content}
-//                                                 </Link>
-//                                             ) : (
-//                                                 <Button
-//                                                     key={index}
-//                                                     disabled
-//                                                     className="px-3 py-1 border rounded-md bg-gray-100 text-gray-400 border-gray-300"
-//                                                 >
-//                                                     {content}
-//                                                 </Button>
-//                                             );
-//                                         })}
-//                                         {currentPage + 10 <= totalPages && (
-//                                             <Link
-//                                                 href={recommended.path + `?page=${goForward10}`}
-//                                                 className="px-3 py-1 border rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200"
-//                                             >
-//                                                 <ChevronsRight className="w-4 h-4" />
-//                                             </Link>
-//                                         )}
-//                                     </div>
-//                                 )}
-//                             </div>
-//                         )}
-//                     </TabsContent>
-//                 </Tabs>
-//             </div>
-//         </>
-//     );
-// }
-
-// resources/js/Pages/dashboard.tsx
-
 import { AnalyticsCard } from '@/components/jobseeker/analytics-card';
 import { Link, usePage, router } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
@@ -1135,11 +8,16 @@ import {
     Plus,
     Search,
     SlidersHorizontal,
+    Sparkles,
+    CheckCircle2,
+    AlertCircle,
+    ArrowRight
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import React, { useState, useEffect, useCallback } from 'react';
 import { debounce } from 'lodash';
 import {
+    ProfileCompleteness,
     Recommended,
     RecommendedPagination,
     VacancyPagination,
@@ -1151,15 +29,17 @@ import { JobSeekerProfile } from '@/types/jobseeker';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getVacancyType } from '@/lib/employer.data';
 import { Badge } from '@/components/ui/badge';
-import JobseekerPaginate from '@/components/jobseeker-paginate'; // Updated import
+import JobseekerPaginate from '@/components/jobseeker-paginate';
 import VacancyCard from '@/components/jobseeker/vacancy-card';
 import { SharedData } from '@/types';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
-import { industries } from '@/lib/jobseeker.data';
+import { cn } from '@/lib/utils';
+import { route } from 'ziggy-js';
 
 interface FilterState {
     search: string;
@@ -1172,17 +52,19 @@ interface FilterState {
 }
 
 export default function JobSeekerDashboard({
-                                               jobseeker,
-                                               hasJobSeeker,
-                                               vacancies,
-                                               totalCountApplication = 0,
-                                               totalCountViews = 0,
-                                               totalCountAllVacancies = 0,
-                                               totalCountRecommendedVacancies = 0,
-                                               recommended,
-                                           }: {
+    jobseeker,
+    hasJobSeeker,
+    completeness,
+    vacancies,
+    totalCountApplication = 0,
+    totalCountViews = 0,
+    totalCountAllVacancies = 0,
+    totalCountRecommendedVacancies = 0,
+    recommended,
+}: {
     jobseeker: JobSeekerProfile;
     hasJobSeeker: boolean;
+    completeness?: ProfileCompleteness | null;
     vacancies: VacancyPagination;
     totalCountApplication: number;
     totalCountViews: number;
@@ -1191,7 +73,7 @@ export default function JobSeekerDashboard({
     recommended: RecommendedPagination;
 }) {
     const [showCVPreview, setShowCVPreview] = useState(false);
-    const { filters } = usePage<SharedData & { filters: FilterState; industries: { id: number; name: string }[] }>().props;
+    const { filters, industries = [] } = usePage<SharedData & { filters: FilterState; industries: { id: number; name: string }[] }>().props;
     const [searchTerm, setSearchTerm] = useState<string>(filters?.search || '');
     const [showFilters, setShowFilters] = useState(false);
     const [activeFilters, setActiveFilters] = useState<FilterState>({
@@ -1218,15 +100,14 @@ export default function JobSeekerDashboard({
             if (filters.industry) params.industry = filters.industry;
             params.sortBy = filters.sortBy;
 
-
             router.get(route('dashboard'), params, {
                 preserveState: true,
                 preserveScroll: true,
                 onSuccess: () => {
-                    toast.success('Фильтры и поиск применены');
+                    // Filter applied
                 },
-                onError: (errors) => {
-                    toast.error('Ошибка при применении фильтров или поиска');
+                onError: () => {
+                    toast.error('Ошибка при применении фильтров');
                 },
             });
         }, 300),
@@ -1255,11 +136,11 @@ export default function JobSeekerDashboard({
     };
 
     const handleResetFilters = () => {
-        const resetFilters = {
+        const resetFilters: FilterState = {
             search: '',
             location: '',
             jobType: [],
-            salaryRange: [0, 100000] as [number, number],
+            salaryRange: [0, 100000],
             skills: [],
             sortBy: 'relevance',
             industry: null,
@@ -1278,59 +159,66 @@ export default function JobSeekerDashboard({
     };
 
     const renderFilterUI = (dataLength: number) => (
-        <>
-            <div className="flex gap-4">
+        <div className="space-y-4">
+            <div className="flex flex-wrap md:flex-nowrap gap-3">
                 <div className="relative flex-1">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                     <Input
                         placeholder="Поиск вакансий по названию, компании или навыкам..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-10"
+                        className="pl-9 h-10"
                     />
                 </div>
+
                 <Dialog open={showFilters} onOpenChange={setShowFilters}>
                     <DialogTrigger asChild>
                         <Button
                             variant="outline"
-                            className={hasActiveFilters() ? 'border-primary text-primary' : ''}
+                            className={cn('h-10', hasActiveFilters() ? 'border-primary text-primary font-semibold' : '')}
                         >
                             <SlidersHorizontal className="h-4 w-4 mr-2" />
                             Фильтры
                             {hasActiveFilters() && (
-                                <Badge variant="secondary" className="ml-2 h-5 w-5 p-0 flex items-center justify-center text-xs">
-                                    !
+                                <Badge variant="default" className="ml-2 h-5 w-5 p-0 flex items-center justify-center text-[10px] rounded-full">
+                                    ✓
                                 </Badge>
                             )}
                         </Button>
                     </DialogTrigger>
-                    <DialogContent>
+
+                    <DialogContent className="max-w-lg">
                         <DialogHeader>
                             <DialogTitle>Фильтры вакансий</DialogTitle>
                         </DialogHeader>
-                        <div className="space-y-4">
+                        <div className="space-y-4 py-2">
                             <div>
-                                <Label>Местоположение</Label>
+                                <Label className="text-xs font-semibold">Город / Локация</Label>
                                 <Input
                                     value={activeFilters.location}
                                     onChange={(e) =>
                                         setActiveFilters({ ...activeFilters, location: e.target.value })
                                     }
-                                    placeholder="Введите город или регион"
+                                    placeholder="Душанбе, Худжанд..."
+                                    className="mt-1"
                                 />
                             </div>
+
                             <div>
-                                <Label>Тип занятости</Label>
-                                <div className="flex flex-wrap gap-2">
+                                <Label className="text-xs font-semibold">Тип занятости</Label>
+                                <div className="flex flex-wrap gap-1.5 mt-1.5">
                                     {['full', 'part', 'remote', 'contract', 'internship', 'temporary'].map(
                                         (type) => (
                                             <Button
                                                 key={type}
+                                                type="button"
+                                                size="sm"
                                                 variant={
                                                     activeFilters.jobType.includes(type)
                                                         ? 'default'
                                                         : 'outline'
                                                 }
+                                                className="text-xs h-7"
                                                 onClick={() =>
                                                     setActiveFilters({
                                                         ...activeFilters,
@@ -1346,8 +234,12 @@ export default function JobSeekerDashboard({
                                     )}
                                 </div>
                             </div>
+
                             <div>
-                                <Label>Диапазон зарплаты</Label>
+                                <div className="flex justify-between text-xs mb-1">
+                                    <Label className="font-semibold">Диапазон зарплаты</Label>
+                                    <span className="text-muted-foreground">{activeFilters.salaryRange[0]} – {activeFilters.salaryRange[1]} смн.</span>
+                                </div>
                                 <Slider
                                     value={activeFilters.salaryRange}
                                     onValueChange={(value: [number, number]) =>
@@ -1356,254 +248,292 @@ export default function JobSeekerDashboard({
                                     min={0}
                                     max={100000}
                                     step={500}
-                                    defaultValue={[0, 100000]}
                                 />
-                                <div className="flex justify-between text-sm">
-                                    <span>{activeFilters.salaryRange[0]} смн.</span>
-                                    <span>100000 смн.</span>
-                                </div>
                             </div>
+
                             <div>
-                                <Label>Навыки</Label>
+                                <Label className="text-xs font-semibold">Навыки (через запятую)</Label>
                                 <Input
-                                    value={activeFilters.skills.join(',')}
+                                    value={activeFilters.skills.join(', ')}
                                     onChange={(e) =>
                                         setActiveFilters({
                                             ...activeFilters,
                                             skills: e.target.value
-                                                ? e.target.value.split(',').map((s) => s.trim()).filter((s) => s)
+                                                ? e.target.value.split(',').map((s) => s.trim()).filter(Boolean)
                                                 : [],
                                         })
                                     }
-                                    placeholder="Введите навыки через запятую"
+                                    placeholder="Python, React, SQL..."
+                                    className="mt-1"
                                 />
                             </div>
+
                             <div>
-                                <Label>Отрасль</Label>
+                                <Label className="text-xs font-semibold">Отрасль</Label>
                                 <Select
                                     value={activeFilters.industry || 'all'}
                                     onValueChange={(value) =>
                                         setActiveFilters({ ...activeFilters, industry: value === 'all' ? null : value })
                                     }
                                 >
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Выберите отрасль" />
+                                    <SelectTrigger className="mt-1">
+                                        <SelectValue placeholder="Все отрасли" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="all">Все отрасли</SelectItem>
-                                        {industries.map((industry) => (
-                                            <SelectItem key={industry.id} value={industry.id.toString()}>
-                                                {industry.name}
+                                        {industries.map((ind) => (
+                                            <SelectItem key={ind.id} value={ind.id.toString()}>
+                                                {ind.name}
                                             </SelectItem>
                                         ))}
                                     </SelectContent>
                                 </Select>
                             </div>
+
                             <div>
-                                <Label>Сортировка</Label>
+                                <Label className="text-xs font-semibold">Сортировка</Label>
                                 <Select
                                     value={activeFilters.sortBy}
                                     onValueChange={(value) =>
                                         setActiveFilters({ ...activeFilters, sortBy: value })
                                     }
                                 >
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Выберите сортировку" />
+                                    <SelectTrigger className="mt-1">
+                                        <SelectValue placeholder="По релевантности" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="relevance">По релевантности</SelectItem>
-                                        <SelectItem value="date">По дате</SelectItem>
-                                        <SelectItem value="salary_high">По зарплате (убыв.)</SelectItem>
-                                        <SelectItem value="salary_low">По зарплате (возр.)</SelectItem>
+                                        <SelectItem value="relevance">По соответствию (Match Score)</SelectItem>
+                                        <SelectItem value="date">По дате публикации</SelectItem>
+                                        <SelectItem value="salary_high">По зарплате (по убыванию)</SelectItem>
+                                        <SelectItem value="salary_low">По зарплате (по возрастанию)</SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>
-                            <div className="flex gap-2">
-                                <Button onClick={() => handleApplyFilters(activeFilters)}>Применить</Button>
+
+                            <div className="flex gap-2 pt-2 border-t">
+                                <Button className="flex-1" onClick={() => handleApplyFilters(activeFilters)}>Применить</Button>
                                 <Button variant="outline" onClick={handleResetFilters}>Сбросить</Button>
                             </div>
                         </div>
                     </DialogContent>
                 </Dialog>
+
                 {hasActiveFilters() && (
-                    <Button variant="ghost" onClick={handleResetFilters}>Сбросить</Button>
+                    <Button variant="ghost" size="sm" onClick={handleResetFilters} className="h-10 text-xs">
+                        Сбросить
+                    </Button>
                 )}
             </div>
 
             {hasActiveFilters() && (
-                <div className="flex flex-wrap gap-2 p-4 bg-muted/50 rounded-lg">
-                    <span className="text-sm font-medium">Активные фильтры:</span>
+                <div className="flex flex-wrap items-center gap-1.5 p-3 bg-muted/40 rounded-lg text-xs">
+                    <span className="font-semibold text-muted-foreground mr-1">Фильтры:</span>
                     {activeFilters.search && <Badge variant="secondary">Поиск: {activeFilters.search}</Badge>}
                     {activeFilters.location && <Badge variant="secondary">Локация: {activeFilters.location}</Badge>}
-                    {activeFilters.jobType.map((type) => (
-                        <Badge key={type} variant="secondary">
-                            {getVacancyType(type)}
-                        </Badge>
-                    ))}
-                    {activeFilters.salaryRange && (
-                        <Badge variant="secondary">
-                            Зарплата: {activeFilters.salaryRange[0]} - {activeFilters.salaryRange[1]} смн.
-                        </Badge>
-                    )}
-                    {activeFilters.skills.map((skill) => (
-                        <Badge key={skill} variant="secondary">{skill}</Badge>
+                    {activeFilters.jobType.map((t) => (
+                        <Badge key={t} variant="secondary">{getVacancyType(t)}</Badge>
                     ))}
                     {activeFilters.industry && (
                         <Badge variant="secondary">
-                            Отрасль: {industries.find((i) => i.id.toString() === activeFilters.industry)?.name || ''}
+                            Отрасль: {industries.find(i => i.id.toString() === activeFilters.industry)?.name || ''}
                         </Badge>
                     )}
-                    <Badge variant="secondary">
-                        Сортировка:{' '}
-                        {activeFilters.sortBy === 'relevance'
-                            ? 'По релевантности'
-                            : activeFilters.sortBy === 'date'
-                                ? 'По дате'
-                                : activeFilters.sortBy === 'salary_high'
-                                    ? 'По зарплате (убыв.)'
-                                    : 'По зарплате (возр.)'}
-                    </Badge>
                 </div>
             )}
 
-            <div className="flex justify-between items-center">
-                <p className="text-sm text-muted-foreground">
-                    Найдено {dataLength}{' '}
-                    {dataLength === 1 ? 'вакансия' : 'вакансий'}
-                </p>
-                <div className="text-sm text-muted-foreground">
-                    Сортировка:{' '}
-                    {activeFilters.sortBy === 'relevance'
-                        ? 'По релевантности'
-                        : activeFilters.sortBy === 'date'
-                            ? 'По дате'
-                            : activeFilters.sortBy === 'salary_high'
-                                ? 'По зарплате (убыв.)'
-                                : 'По зарплате (возр.)'}
-                </div>
+            <div className="flex justify-between items-center text-xs text-muted-foreground px-1">
+                <span>Найдено вакансий: <strong className="text-foreground">{dataLength}</strong></span>
             </div>
-        </>
+        </div>
     );
 
     return (
-        <div className="@container/main p-2 flex flex-1 flex-col gap-2">
-            <div className="flex flex-col gap-4 md:gap-6">
-                <AnalyticsCard
-                    totalCountApplication={totalCountApplication}
-                    totalCountRecommendedVacancies={totalCountRecommendedVacancies}
-                    totalCountAllVacancies={totalCountAllVacancies}
-                    totalCountViewProfile={totalCountViews}
-                />
-                <div className="flex items-center justify-between">
-                    <span className="text-3xl font-bold">Вакансии</span>
+        <div className="space-y-6 max-w-7xl mx-auto w-full">
+            {/* Analytics Card Bar */}
+            <AnalyticsCard
+                totalCountApplication={totalCountApplication}
+                totalCountRecommendedVacancies={totalCountRecommendedVacancies}
+                totalCountAllVacancies={totalCountAllVacancies}
+                totalCountViewProfile={totalCountViews}
+            />
+
+            {/* Profile Completeness Card (if profile exists) */}
+            {completeness && (
+                <Card className="border border-border/80 bg-card shadow-sm">
+                    <CardHeader className="py-3 px-4 md:px-6">
+                        <div className="flex flex-wrap items-center justify-between gap-3">
+                            <div className="flex items-center gap-2.5">
+                                <div className="p-2 rounded-lg bg-primary/10 text-primary">
+                                    <Sparkles className="h-4 w-4" />
+                                </div>
+                                <div>
+                                    <CardTitle className="text-sm font-bold">
+                                        Заполненность профиля: {completeness.percentage}%
+                                    </CardTitle>
+                                    <p className="text-xs text-muted-foreground">
+                                        {completeness.percentage >= 80
+                                            ? 'Отлично! Ваш профиль полностью готов к автоматическому подбору вакансий.'
+                                            : 'Заполните недостающие разделы для более точного расчета Match Score.'}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <Button variant="outline" size="sm" asChild className="h-8 text-xs">
+                                <Link href={route('jobseeker.edit')}>
+                                    Редактировать профиль <ArrowRight className="ml-1 h-3 w-3" />
+                                </Link>
+                            </Button>
+                        </div>
+
+                        <div className="w-full bg-muted rounded-full h-2 mt-3 overflow-hidden">
+                            <div
+                                className={cn(
+                                    "h-full rounded-full transition-all duration-500",
+                                    completeness.percentage >= 80 ? "bg-emerald-500" : completeness.percentage >= 50 ? "bg-blue-500" : "bg-amber-500"
+                                )}
+                                style={{ width: `${completeness.percentage}%` }}
+                            />
+                        </div>
+                    </CardHeader>
+                </Card>
+            )}
+
+            {/* Section Header */}
+            <div className="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Вакансии</h1>
+                    <p className="text-sm text-muted-foreground">
+                        Поиск подходящей работы на основе ваших навыков и опыта
+                    </p>
+                </div>
+
+                <div className="flex items-center gap-2">
                     {hasJobSeeker ? (
                         <Dialog open={showCVPreview} onOpenChange={setShowCVPreview}>
                             <DialogTrigger asChild>
-                                <Button variant="outline">
-                                    <Eye className="h-4 w-4" /> Просмотр резюме
+                                <Button variant="outline" size="sm" className="h-9">
+                                    <Eye className="h-4 w-4 mr-1.5" /> Просмотр резюме
                                 </Button>
                             </DialogTrigger>
                             <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
                                 <DialogHeader>
-                                    <DialogTitle>Предпросмотр CV</DialogTitle>
+                                    <DialogTitle>Предпросмотр вашего резюме</DialogTitle>
                                 </DialogHeader>
                                 <CVViewer data={jobseeker} showActions={false} />
                             </DialogContent>
                         </Dialog>
                     ) : (
-                        <Link href={route('jobseeker.index')}>
-                            <Button>
-                                <Plus className="h-4 w-4" /> Заполнить резюме (CV)
-                            </Button>
-                        </Link>
+                        <Button asChild size="sm" className="h-9">
+                            <Link href={route('jobseeker.index')}>
+                                <Plus className="h-4 w-4 mr-1.5" /> Заполнить резюме (CV)
+                            </Link>
+                        </Button>
                     )}
                 </div>
             </div>
-            <Tabs defaultValue="all">
-                <TabsList className="grid w-full grid-cols-1 md:grid-cols-2">
-                    <TabsTrigger value="all">Все</TabsTrigger>
-                    <TabsTrigger value="recommended">Рекомендованные</TabsTrigger>
+
+            {/* Tabs & Vacancy List */}
+            <Tabs defaultValue="recommended" className="space-y-6">
+                <TabsList className="grid w-full grid-cols-2 max-w-md h-10">
+                    <TabsTrigger value="recommended" className="text-xs md:text-sm font-semibold flex items-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5 text-primary" />
+                        Рекомендованные ({recommended.total || 0})
+                    </TabsTrigger>
+                    <TabsTrigger value="all" className="text-xs md:text-sm font-semibold">
+                        Все вакансии ({totalCountAllVacancies})
+                    </TabsTrigger>
                 </TabsList>
-                <TabsContent value="all" className="space-y-6">
-                    {renderFilterUI(vacancies.data.length)}
-                    {vacancies.data.length === 0 ? (
-                        <div className="flex flex-col items-center gap-4 py-20 text-center text-muted-foreground">
-                            <Inbox className="h-16 w-16 text-muted-foreground" />
-                            <span>Пока нет вакансий</span>
-                        </div>
-                    ) : (
-                        <>
-                            {vacancies.data.map((vacancy: VacancyWithEmployer, index) => (
-                                <VacancyCard key={index} vacancy={vacancy} />
-                            ))}
-                            <div className="mt-4 flex items-center justify-end">
-                                <JobseekerPaginate data={vacancies} />
-                            </div>
-                        </>
-                    )}
-                </TabsContent>
+
+                {/* Recommended Tab */}
                 <TabsContent value="recommended" className="space-y-6">
                     {renderFilterUI(recommended.data.length)}
+
                     {recommended.data.length === 0 ? (
-                        <div className="flex flex-col items-center gap-4 py-20 text-center text-muted-foreground">
-                            <Inbox className="h-16 w-16 text-muted-foreground" />
-                            <span>Пока нет вакансий</span>
-                            <Link
-                                href={route('recommended.vacancy', jobseeker ? jobseeker.id : 0)}
-                                onClick={() => setIsSearching(true)}
-                            >
-                                <motion.button
-                                    disabled={isSearching}
-                                    whileTap={{ scale: 0.95 }}
-                                    whileHover={{ scale: 1.05 }}
-                                    animate={isSearching ? { rotate: 360 } : { rotate: 0 }}
-                                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                                    className="px-4 py-2 bg-blue-600 text-white rounded-md flex items-center gap-2"
-                                >
-                                    {isSearching && (
-                                        <span className="animate-spin inline-block">
-                                            <Loader2 />
-                                        </span>
-                                    )}
-                                    Начать поиск
-                                </motion.button>
-                            </Link>
+                        <div className="flex flex-col items-center justify-center py-16 text-center space-y-4 rounded-xl border border-dashed p-8 bg-muted/20">
+                            <Inbox className="h-12 w-12 text-muted-foreground/60" />
+                            <div className="space-y-1">
+                                <h3 className="font-semibold text-lg">Пока нет рекомендаций</h3>
+                                <p className="text-sm text-muted-foreground max-w-md">
+                                    Заполните ваш профиль или нажмите кнопку ниже, чтобы запустить расчет соответствия с вакансиями.
+                                </p>
+                            </div>
+                            <Button asChild onClick={() => setIsSearching(true)}>
+                                <Link href={route('recommended.vacancy', jobseeker ? jobseeker.id : 0)}>
+                                    {isSearching ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
+                                    Обновить рекомендации
+                                </Link>
+                            </Button>
                         </div>
                     ) : (
-                        <div className="space-y-6">
-                            <div className="flex items-center justify-end mt-4">
-                                <Link
-                                    href={route('recommended.vacancy', jobseeker ? jobseeker.id : 0)}
+                        <div className="space-y-4">
+                            <div className="flex justify-end">
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    asChild
+                                    className="text-xs"
                                     onClick={() => setIsSearching(true)}
                                 >
-                                    <motion.button
-                                        disabled={isSearching}
-                                        whileTap={{ scale: 0.95 }}
-                                        whileHover={{ scale: 1.05 }}
-                                        animate={isSearching ? { rotate: 360 } : { rotate: 0 }}
-                                        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                                        className="px-4 py-2 bg-blue-600 text-white rounded-md flex items-center gap-2"
-                                    >
-                                        {isSearching && (
-                                            <span className="animate-spin inline-block">
-                                                <Loader2 />
-                                            </span>
-                                        )}
-                                        Начать поиск
-                                    </motion.button>
-                                </Link>
+                                    <Link href={route('recommended.vacancy', jobseeker ? jobseeker.id : 0)}>
+                                        {isSearching ? <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> : <Sparkles className="mr-1.5 h-3.5 w-3.5 text-primary" />}
+                                        Пересчитать AI Match
+                                    </Link>
+                                </Button>
                             </div>
-                            {recommended.data.map((recommend: Recommended, index) => (
-                                <VacancyCard
-                                    key={index}
-                                    vacancy={recommend.vacancy}
-                                    setScore={true}
-                                    score={recommend.score}
-                                />
-                            ))}
+
+                            <div className="grid grid-cols-1 gap-4">
+                                {recommended.data.map((rec: Recommended, idx: number) => (
+                                    <VacancyCard
+                                        key={rec.id || idx}
+                                        vacancy={rec.vacancy}
+                                        setScore={true}
+                                        score={rec.score}
+                                    />
+                                ))}
+                            </div>
+
                             {recommended.data.length > 0 && (
-                                <div className="mt-4 flex items-center justify-end">
+                                <div className="mt-6 flex justify-end">
                                     <JobseekerPaginate data={recommended} />
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </TabsContent>
+
+                {/* All Vacancies Tab */}
+                <TabsContent value="all" className="space-y-6">
+                    {renderFilterUI(vacancies.data.length)}
+
+                    {vacancies.data.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center py-16 text-center space-y-4 rounded-xl border border-dashed p-8 bg-muted/20">
+                            <Inbox className="h-12 w-12 text-muted-foreground/60" />
+                            <div className="space-y-1">
+                                <h3 className="font-semibold text-lg">Вакансии не найдены</h3>
+                                <p className="text-sm text-muted-foreground">
+                                    Попробуйте изменить параметры поиска или сбросить фильтры.
+                                </p>
+                            </div>
+                            <Button variant="outline" size="sm" onClick={handleResetFilters}>
+                                Сбросить фильтры
+                            </Button>
+                        </div>
+                    ) : (
+                        <div className="space-y-4">
+                            <div className="grid grid-cols-1 gap-4">
+                                {vacancies.data.map((vacancy: VacancyWithEmployer, idx: number) => (
+                                    <VacancyCard
+                                        key={vacancy.id || idx}
+                                        vacancy={vacancy}
+                                        setScore={hasJobSeeker}
+                                        score={vacancy.score}
+                                    />
+                                ))}
+                            </div>
+
+                            {vacancies.data.length > 0 && (
+                                <div className="mt-6 flex justify-end">
+                                    <JobseekerPaginate data={vacancies} />
                                 </div>
                             )}
                         </div>

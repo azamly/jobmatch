@@ -1,12 +1,10 @@
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem, SharedData } from '@/types';
-import { Head, usePage } from '@inertiajs/react';
+import { type BreadcrumbItem } from '@/types';
+import { Head } from '@inertiajs/react';
 import JobSeekerDashboard from '@/components/jobseeker/dashboard';
 import EmployerDashboard from '@/components/employer/dashboard';
-import { Recommended, RecommendedPagination, Vacancy, VacancyPagination, VacancyWithEmployer } from '@/types/employer';
+import { ProfileCompleteness, RecommendedPagination, VacancyPagination } from '@/types/employer';
 import { JobSeekerPagination, JobSeekerProfile } from '@/types/jobseeker';
-import { useEcho } from '@laravel/echo-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -16,24 +14,28 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 interface JobseekerProps {
-    role: "jobseeker"
-    jobseeker: JobSeekerProfile
-    hasJobSeeker: boolean
-    vacancies: VacancyPagination
-    recommended:RecommendedPagination,
-    totalCountApplication: number,
-    totalCountViews: number,
-    totalCountAllVacancies:number,
-    totalCountRecommendedVacancies:number,
+    role: "jobseeker";
+    jobseeker: JobSeekerProfile;
+    hasJobSeeker: boolean;
+    completeness?: ProfileCompleteness | null;
+    vacancies: VacancyPagination;
+    recommended: RecommendedPagination;
+    totalCountApplication: number;
+    totalCountViews: number;
+    totalCountAllVacancies: number;
+    totalCountRecommendedVacancies: number;
 }
 
 interface EmployerProps {
-    role: "employer"
-    jobseekers: JobSeekerPagination
-    recommended:RecommendedPagination
+    role: "employer";
+    jobseekers: JobSeekerPagination;
+    recommendedCandidates?: any;
+    recommended?: any;
+    vacancies?: any;
+    targetVacancy?: any;
 }
 
-type Props = JobseekerProps | EmployerProps
+type Props = JobseekerProps | EmployerProps;
 
 export default function Dashboard(props: Props) {
     if (props.role === "jobseeker") {
@@ -44,16 +46,17 @@ export default function Dashboard(props: Props) {
                     <JobSeekerDashboard
                         jobseeker={props.jobseeker}
                         hasJobSeeker={props.hasJobSeeker}
+                        completeness={props.completeness}
                         vacancies={props.vacancies}
                         totalCountApplication={props.totalCountApplication}
-                        totalCountViews = {props.totalCountViews}
+                        totalCountViews={props.totalCountViews}
                         recommended={props.recommended}
                         totalCountAllVacancies={props.totalCountAllVacancies}
                         totalCountRecommendedVacancies={props.totalCountRecommendedVacancies}
                     />
                 </div>
             </AppLayout>
-        )
+        );
     } else if (props.role === "employer" && props.jobseekers) {
         return (
             <AppLayout breadcrumbs={breadcrumbs}>
@@ -62,9 +65,8 @@ export default function Dashboard(props: Props) {
                     <EmployerDashboard jobseekers={props.jobseekers} recommended={props.recommended} />
                 </div>
             </AppLayout>
-        )
+        );
     } else {
-        return <div>Нет данных для отображения</div>
+        return <div>Нет данных для отображения</div>;
     }
 }
-

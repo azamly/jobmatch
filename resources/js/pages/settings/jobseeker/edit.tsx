@@ -57,13 +57,17 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
+import { ProfileCompleteness } from '@/types/employer';
+import { CheckCircle2, AlertCircle, Sparkles } from 'lucide-react';
+
 interface Props {
     profile: JobSeekerProfileForm;
+    completeness?: ProfileCompleteness | null;
     message?: string;
     type?: "success" | 'info' | 'error';
 }
 
-export default function EditPage({ profile, message, type }: Props) {
+export default function EditPage({ profile, completeness, message, type }: Props) {
     const [isEditing, setIsEditing] = useState(false);
     const { data, setData, patch, processing, errors } = useForm<JobSeekerProfileForm>(profile);
     const [showCVPreview, setShowCVPreview] = useState(false)
@@ -212,7 +216,58 @@ export default function EditPage({ profile, message, type }: Props) {
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="flex items-center justify-between">
                         <HeadingSmall title="Информация о резюме" description={isEditing ? 'Редактируйте ваше резюме' : 'Просмотр вашего резюме'} />
-                        <div className="flex gap-3">
+                    </div>
+
+                    {completeness && (
+                        <Card className="border border-border/80 bg-muted/20">
+                            <CardHeader className="py-3">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <Sparkles className="h-4 w-4 text-primary" />
+                                        <CardTitle className="text-sm font-bold">
+                                            Заполненность профиля: {completeness.percentage}%
+                                        </CardTitle>
+                                    </div>
+                                    <Badge variant={completeness.is_complete ? "default" : "secondary"}>
+                                        {completeness.percentage}%
+                                    </Badge>
+                                </div>
+                                <div className="w-full bg-muted rounded-full h-2 mt-2 overflow-hidden">
+                                    <div
+                                        className={cn(
+                                            "h-full rounded-full transition-all duration-500",
+                                            completeness.percentage >= 80 ? "bg-emerald-500" : completeness.percentage >= 50 ? "bg-blue-500" : "bg-amber-500"
+                                        )}
+                                        style={{ width: `${completeness.percentage}%` }}
+                                    />
+                                </div>
+                            </CardHeader>
+                            <CardContent className="pt-0 pb-3">
+                                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 text-xs">
+                                    {completeness.checklist.map((item) => (
+                                        <div
+                                            key={item.key}
+                                            className={cn(
+                                                "flex items-center gap-1.5 p-1.5 rounded border text-[11px]",
+                                                item.completed
+                                                    ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/20"
+                                                    : "bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/20"
+                                            )}
+                                        >
+                                            {item.completed ? (
+                                                <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-600" />
+                                            ) : (
+                                                <AlertCircle className="h-3.5 w-3.5 shrink-0 text-amber-600" />
+                                            )}
+                                            <span className="truncate">{item.title}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </CardContent>
+                        </Card>
+                    )}
+
+                    <div className="flex justify-end gap-3">
                             <Dialog open={showCVPreview} onOpenChange={setShowCVPreview}>
                                 <DialogTrigger asChild>
                                     <Button variant="outline">
@@ -253,7 +308,6 @@ export default function EditPage({ profile, message, type }: Props) {
                                 </Button>
                             )}
                         </div>
-                    </div>
 
                     {isEditing && (
                         <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
